@@ -73,7 +73,7 @@ def get_coco_summary(groundtruth_bbs, detected_bbs):
         for class_id in _evals:
             acc = _evals[class_id]
             acc["scores"] = np.concatenate(acc["scores"])
-            acc["matched"] = np.concatenate(acc["matched"]).astype(np.bool)
+            acc["matched"] = np.concatenate(acc["matched"]).astype(bool)
             acc["NP"] = np.sum(acc["NP"])
 
         res = []
@@ -234,7 +234,7 @@ def get_coco_metrics(
     for class_id in _evals:
         acc = _evals[class_id]
         acc["scores"] = np.concatenate(acc["scores"])
-        acc["matched"] = np.concatenate(acc["matched"]).astype(np.bool)
+        acc["matched"] = np.concatenate(acc["matched"]).astype(bool)
         acc["NP"] = np.sum(acc["NP"])
 
     res = {}
@@ -390,7 +390,7 @@ def _compute_ap_recall(scores, matched, NP, recall_thresholds=None):
     tp = np.cumsum(matched)
     fp = np.cumsum(~matched)
 
-    rc = tp / NP
+    rc = tp / NP    # = TP + FN -> FN = NP - TP
     pr = tp / (tp + fp)
 
     # make precision monotonically decreasing
@@ -410,5 +410,6 @@ def _compute_ap_recall(scores, matched, NP, recall_thresholds=None):
         "interpolated recall": recall_thresholds,
         "total positives": NP,
         "TP": tp[-1] if len(tp) != 0 else 0,
-        "FP": fp[-1] if len(fp) != 0 else 0
+        "FP": fp[-1] if len(fp) != 0 else 0,
+        "FN": (NP - tp[-1]) if len(tp) != 0 else 0
     }
