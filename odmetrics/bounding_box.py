@@ -241,7 +241,7 @@ class BoundingBox:
         assert isclose(self._w * self._h, (self._x2 - self._x) * (self._y2 - self._y))
         assert (self._x2 >= self._x)
         assert (self._y2 >= self._y)
-        return (self._x2 - self._x + 1) * (self._y2 - self._y + 1)
+        return (self._x2 - self._x) * (self._y2 - self._y)
 
     def get_coordinates_type(self):
         """ Get type of the coordinates (CoordinatesType.RELATIVE or CoordinatesType.ABSOLUTE).
