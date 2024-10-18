@@ -219,7 +219,7 @@ class TubeEvaluator():
         return iou
 
     def _tubes_inter(self, tube1: Tube, tube2: Tube) -> np.array:
-        """Give two tubes of track size N and M,
+        """Give two tubes of track image_size N and M,
         compute de intersection volume between __all__ N x M pairs of boxes.
         The boxes in track must be (xmin, ymin, xmax, ymax)
 
@@ -249,7 +249,7 @@ class TubeEvaluator():
         return inter
 
     def _tubes_union(self, tube1: Tube, tube2: Tube) -> np.array:
-        """Give two tubes of track size N and M,
+        """Give two tubes of track image_size N and M,
         compute de union volume between __all__ N x M pairs of boxes.
 
         Args:

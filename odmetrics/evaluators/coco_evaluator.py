@@ -39,9 +39,9 @@ def get_coco_summary(groundtruth_bbs, detected_bbs):
     Parameters
         ----------
             groundtruth_bbs : list
-                A list containing objects of type BoundingBox representing the ground-truth bounding boxes.
+                A list containing objects of type ValBoundingBox representing the ground-truth bounding boxes.
             detected_bbs : list
-                A list containing objects of type BoundingBox representing the detected bounding boxes.
+                A list containing objects of type ValBoundingBox representing the detected bounding boxes.
     Returns:
             A dictionary with one entry for each metric.
     """
@@ -180,9 +180,9 @@ def get_coco_metrics(
     Parameters
         ----------
             groundtruth_bbs : list
-                A list containing objects of type BoundingBox representing the ground-truth bounding boxes.
+                A list containing objects of type ValBoundingBox representing the ground-truth bounding boxes.
             detected_bbs : list
-                A list containing objects of type BoundingBox representing the detected bounding boxes.
+                A list containing objects of type ValBoundingBox representing the detected bounding boxes.
             iou_threshold : float
                 Intersection Over Union (IOU) value used to consider a TP detection.
             area_range : (numerical x numerical)

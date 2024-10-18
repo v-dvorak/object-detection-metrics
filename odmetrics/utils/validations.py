@@ -230,7 +230,7 @@ def is_pascal_format(file_path):
         True if the file contains annotations in pascal format, False otherwise.
     """
     return is_xml(file_path) and xml_contains_tags(file_path,
-                                                   ['annotation', './size/width', './size/height'])
+                                                   ['annotation', './image_size/width', './image_size/height'])
 
 
 def is_imagenet_format(file_path):

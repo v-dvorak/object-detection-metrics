@@ -5,7 +5,7 @@ import xml.etree.ElementTree as ET
 
 import pandas as pd
 from . import general_utils, validations
-from ..bounding_box import BoundingBox
+from ..bounding_box import ValBoundingBox
 from .enumerators import BBFormat, BBType, CoordinatesType
 
 
@@ -63,15 +63,15 @@ def coco2bb(path, bb_type=BBType.GROUND_TRUTH):
             # Make image name only the filename, without extension
             img_name = images[img_id]['file_name']
             img_name = general_utils.get_file_name_only(img_name)
-            # create BoundingBox object
-            bb = BoundingBox(image_name=img_name,
-                             class_id=classes[annotation['category_id']],
-                             coordinates=(x1, y1, bb_width, bb_height),
-                             type_coordinates=CoordinatesType.ABSOLUTE,
-                             img_size=images[img_id]['img_size'],
-                             confidence=confidence,
-                             bb_type=bb_type,
-                             format=BBFormat.XYWH)
+            # create ValBoundingBox object
+            bb = ValBoundingBox(image_name=img_name,
+                                class_id=classes[annotation['category_id']],
+                                coordinates=(x1, y1, bb_width, bb_height),
+                                type_coordinates=CoordinatesType.ABSOLUTE,
+                                img_size=images[img_id]['img_size'],
+                                confidence=confidence,
+                                bb_type=bb_type,
+                                format=BBFormat.XYWH)
             ret.append(bb)
     return ret
 
@@ -99,13 +99,13 @@ def cvat2bb(path):
                         box_info.attrib['ybr'])
                 x1, y1, x2, y2 = int(x1), int(y1), int(x2), int(y2)
 
-                bb = BoundingBox(image_name=img_name,
-                                 class_id=box_info.attrib['label'],
-                                 coordinates=(x1, y1, x2, y2),
-                                 img_size=img_size,
-                                 type_coordinates=CoordinatesType.ABSOLUTE,
-                                 bb_type=BBType.GROUND_TRUTH,
-                                 format=BBFormat.XYX2Y2)
+                bb = ValBoundingBox(image_name=img_name,
+                                    class_id=box_info.attrib['label'],
+                                    coordinates=(x1, y1, x2, y2),
+                                    img_size=img_size,
+                                    type_coordinates=CoordinatesType.ABSOLUTE,
+                                    bb_type=BBType.GROUND_TRUTH,
+                                    format=BBFormat.XYX2Y2)
                 ret.append(bb)
     return ret
 
@@ -146,14 +146,14 @@ def openimage2bb(annotations_path, images_dir, bb_type=BBType.GROUND_TRUTH):
             if bb_type == BBType.DETECTED and confidence is None:
                 print(f'Warning: Confidence value found in the CSV file for the image {img_name}')
                 return ret
-            bb = BoundingBox(image_name=general_utils.get_file_name_only(row['ImageID']),
-                             class_id=row['LabelName'],
-                             coordinates=(x1, y1, x2, y2),
-                             img_size=img_size,
-                             confidence=confidence,
-                             type_coordinates=CoordinatesType.RELATIVE,
-                             bb_type=bb_type,
-                             format=BBFormat.XYX2Y2)
+            bb = ValBoundingBox(image_name=general_utils.get_file_name_only(row['ImageID']),
+                                class_id=row['LabelName'],
+                                coordinates=(x1, y1, x2, y2),
+                                img_size=img_size,
+                                confidence=confidence,
+                                type_coordinates=CoordinatesType.RELATIVE,
+                                bb_type=bb_type,
+                                format=BBFormat.XYX2Y2)
             ret.append(bb)
     return ret
 
@@ -169,8 +169,8 @@ def imagenet2bb(annotations_path):
         # Open XML
         img_name = ET.parse(file_path).find('filename').text
         img_name = general_utils.get_file_name_only(img_name)
-        img_width = int(ET.parse(file_path).find('size/width').text)
-        img_height = int(ET.parse(file_path).find('size/height').text)
+        img_width = int(ET.parse(file_path).find('image_size/width').text)
+        img_height = int(ET.parse(file_path).find('image_size/height').text)
         img_size = (img_width, img_height)
         # Loop through the detections
         for box_info in ET.parse(file_path).iter('object'):
@@ -179,13 +179,13 @@ def imagenet2bb(annotations_path):
             y1 = int(float(box_info.find('bndbox/ymin').text))
             x2 = int(float(box_info.find('bndbox/xmax').text))
             y2 = int(float(box_info.find('bndbox/ymax').text))
-            bb = BoundingBox(image_name=img_name,
-                             class_id=obj_class,
-                             coordinates=(x1, y1, x2, y2),
-                             img_size=img_size,
-                             type_coordinates=CoordinatesType.ABSOLUTE,
-                             bb_type=BBType.GROUND_TRUTH,
-                             format=BBFormat.XYX2Y2)
+            bb = ValBoundingBox(image_name=img_name,
+                                class_id=obj_class,
+                                coordinates=(x1, y1, x2, y2),
+                                img_size=img_size,
+                                type_coordinates=CoordinatesType.ABSOLUTE,
+                                bb_type=BBType.GROUND_TRUTH,
+                                format=BBFormat.XYX2Y2)
             ret.append(bb)
     return ret
 
@@ -220,14 +220,14 @@ def labelme2bb(annotations_path):
                     continue
                 x1, y1, x2, y2 = int(float(x1)), int(float(y1)), int(float(x2)), int(float(y2))
 
-                bb = BoundingBox(image_name=img_path,
-                                 class_id=obj_label,
-                                 coordinates=(x1, y1, x2, y2),
-                                 img_size=img_size,
-                                 confidence=None,
-                                 type_coordinates=CoordinatesType.ABSOLUTE,
-                                 bb_type=BBType.GROUND_TRUTH,
-                                 format=BBFormat.XYX2Y2)
+                bb = ValBoundingBox(image_name=img_path,
+                                    class_id=obj_label,
+                                    coordinates=(x1, y1, x2, y2),
+                                    img_size=img_size,
+                                    confidence=None,
+                                    type_coordinates=CoordinatesType.ABSOLUTE,
+                                    bb_type=BBType.GROUND_TRUTH,
+                                    format=BBFormat.XYX2Y2)
                 ret.append(bb)
     return ret
 
@@ -263,7 +263,7 @@ def text2bb(annotations_path,
             img_filename, file_suffix = os.path.splitext(img_filename)
 
             img_size = None
-            # If coordinates are relative, image size must be obtained in the img_dir
+            # If coordinates are relative, image image_size must be obtained in the img_dir
             if type_coordinates == CoordinatesType.RELATIVE:
                 img_path = general_utils.find_image_file(img_dir, img_filename + file_suffix)
                 if img_path is None or os.path.isfile(img_path) is False:
@@ -290,14 +290,14 @@ def text2bb(annotations_path,
                     y1 = float(splitted_line[3])
                     w = float(splitted_line[4])
                     h = float(splitted_line[5])
-                bb = BoundingBox(image_name=img_filename,
-                                 class_id=class_id,
-                                 coordinates=(x1, y1, w, h),
-                                 img_size=img_size,
-                                 confidence=confidence,
-                                 type_coordinates=type_coordinates,
-                                 bb_type=bb_type,
-                                 format=bb_format)
+                bb = ValBoundingBox(image_name=img_filename,
+                                    class_id=class_id,
+                                    coordinates=(x1, y1, w, h),
+                                    img_size=img_size,
+                                    confidence=confidence,
+                                    type_coordinates=type_coordinates,
+                                    bb_type=bb_type,
+                                    format=bb_format)
                 # If the format is correct, x,y,w,h,x2,y2 must be positive
                 x, y, w, h = bb.get_absolute_bounding_box(format=BBFormat.XYWH)
                 _, _, x2, y2 = bb.get_absolute_bounding_box(format=BBFormat.XYX2Y2)
@@ -358,14 +358,14 @@ def yolo2bb(annotations_path, images_dir, file_obj_names, bb_type=BBType.GROUND_
                     y1 = float(splitted_line[3])
                     w = float(splitted_line[4])
                     h = float(splitted_line[5])
-                bb = BoundingBox(image_name=general_utils.get_file_name_only(img_file),
-                                 class_id=all_classes[class_id],
-                                 coordinates=(x1, y1, w, h),
-                                 img_size=img_size,
-                                 confidence=confidence,
-                                 type_coordinates=CoordinatesType.RELATIVE,
-                                 bb_type=bb_type,
-                                 format=BBFormat.YOLO)
+                bb = ValBoundingBox(image_name=general_utils.get_file_name_only(img_file),
+                                    class_id=all_classes[class_id],
+                                    coordinates=(x1, y1, w, h),
+                                    img_size=img_size,
+                                    confidence=confidence,
+                                    type_coordinates=CoordinatesType.RELATIVE,
+                                    bb_type=bb_type,
+                                    format=BBFormat.YOLO)
                 ret.append(bb)
     return ret
 
@@ -377,8 +377,8 @@ def xml2csv(xml_path):
     try:
         tree = ET.parse(xml_path)
         root = tree.getroot()
-        img_width = int(root.find('size')[0].text)
-        img_height = int(root.find('size')[1].text)
+        img_width = int(root.find('image_size')[0].text)
+        img_height = int(root.find('image_size')[1].text)
         filename = root.find('filename').text
         for member in root.findall('object'):
             value = (

@@ -5,7 +5,7 @@ from collections import Counter
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-from ..bounding_box import BoundingBox
+from ..bounding_box import ValBoundingBox
 from ..utils.enumerators import (BBFormat, CoordinatesType,
                                    MethodAveragePrecision)
 
@@ -157,7 +157,7 @@ def get_pascalvoc_metrics(gt_boxes,
             for j, g in enumerate(gt):
                 # print('Ground truth gt => %s' %
                 #       str(g.get_absolute_bounding_box(format=BBFormat.XYX2Y2)))
-                iou = BoundingBox.iou(det, g)
+                iou = ValBoundingBox.iou(det, g)
                 if iou > iouMax:
                     iouMax = iou
                     id_match_gt = j

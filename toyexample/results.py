@@ -48,10 +48,10 @@ filepath_yolo_names = '/home/rafael/thesis/review_object_detection_metrics/toyex
 gt_bbs = pickle.load(open('gts.pickle', 'rb'))
 det_bbs = pickle.load(open('dets.pickle', 'rb'))
 
-# dict_bbs_per_class = BoundingBox.get_amount_bounding_box_all_classes(gt_bbs, reverse=True)
+# dict_bbs_per_class = ValBoundingBox.get_amount_bounding_box_all_classes(gt_bbs, reverse=True)
 # general_utils.plot_bb_per_classes(dict_bbs_per_class, horizontally=False, rotation=90, show=True, extra_title=' (groundtruths)')
 
-# dict_bbs_per_class = BoundingBox.get_amount_bounding_box_all_classes(det_bbs, reverse=True)
+# dict_bbs_per_class = ValBoundingBox.get_amount_bounding_box_all_classes(det_bbs, reverse=True)
 # general_utils.plot_bb_per_classes(dict_bbs_per_class, horizontally=False, rotation=90, show=True, extra_title=' (detections)')
 
 #############################################################

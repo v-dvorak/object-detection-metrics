@@ -1,10 +1,9 @@
-import fnmatch
 import os
 
 import cv2
 import matplotlib.pyplot as plt
 import numpy as np
-from PyQt5 import QtCore, QtGui
+
 from .enumerators import BBFormat
 
 
@@ -50,7 +49,7 @@ def convert_box_xyxy2xywh(box):
     return arr
 
 
-# size => (width, height) of the image
+# image_size => (width, height) of the image
 # box => (X1, X2, Y1, Y2) of the bounding box
 def convert_to_relative_values(size, box):
     dw = 1. / (size[0])
@@ -70,7 +69,7 @@ def convert_to_relative_values(size, box):
     return (x, y, w, h)
 
 
-# size => (width, height) of the image
+# image_size => (width, height) of the image
 # box => (centerX, centerY, w, h) of the bounding box relative to the image
 def convert_to_absolute_values(size, box):
     w_box = size[0] * box[2]
@@ -100,7 +99,7 @@ def add_bb_into_image(image, bb, color=(255, 0, 0), thickness=2, label=None):
     cv2.rectangle(image, (x1, y1), (x2, y2), (b, g, r), thickness)
     # Add label
     if label is not None:
-        # Get size of the text box
+        # Get image_size of the text box
         (tw, th) = cv2.getTextSize(label, font, fontScale, fontThickness)[0]
         # Top-left coord of the textbox
         (xin_bb, yin_bb) = (x1 + thickness, y1 - th + int(12.5 * fontScale))
@@ -142,21 +141,11 @@ def remove_file_extension(filename):
 
 
 def image_to_pixmap(image):
-    image = image.astype(np.uint8)
-    if image.shape[2] == 4:
-        qformat = QtGui.QImage.Format_RGBA8888
-    else:
-        qformat = QtGui.QImage.Format_RGB888
-
-    image = QtGui.QImage(image.data, image.shape[1], image.shape[0], image.strides[0], qformat)
-    # image= image.rgbSwapped()
-    return QtGui.QPixmap(image)
+    raise NotImplementedError()
 
 
 def show_image_in_qt_component(image, label_component):
-    pix = image_to_pixmap((image).astype(np.uint8))
-    label_component.setPixmap(pix)
-    label_component.setAlignment(QtCore.Qt.AlignCenter)
+    raise NotImplementedError()
 
 
 def get_files_recursively(directory, extension="*"):
@@ -235,7 +224,7 @@ def draw_bb_into_image(image, boundingBox, color, thickness, label=None):
                   (b, g, r), thickness)
     # Add label
     if label is not None:
-        # Get size of the text box
+        # Get image_size of the text box
         (tw, th) = cv2.getTextSize(label, font, fontScale, fontThickness)[0]
         # Top-left coord of the textbox
         (xin_bb, yin_bb) = (xIn + thickness, yIn - th + int(12.5 * fontScale))

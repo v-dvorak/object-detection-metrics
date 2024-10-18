@@ -7,7 +7,7 @@ import cv2
 from ..odmetrics.evaluators import pascal_voc_evaluator
 from ..odmetrics.utils import converter
 from ..odmetrics.utils import general_utils
-from ..odmetrics.bounding_box import BoundingBox
+from ..odmetrics.bounding_box import ValBoundingBox
 from ..odmetrics.utils.enumerators import BBFormat, BBType, CoordinatesType
 
 dir_imgs = 'toyexample/images'
@@ -34,7 +34,7 @@ def draw_bb_into_image(image, bounding_box, color, thickness, label=None):
                   (b, g, r), thickness)
     # Add label
     if label is not None:
-        # Get size of the text box
+        # Get image_size of the text box
         (tw, th) = cv2.getTextSize(label, font, fontScale, fontThickness)[0]
         # Top-left coord of the textbox
         (xin_bb, yin_bb) = (xIn + thickness, yIn - th + int(12.5 * fontScale))

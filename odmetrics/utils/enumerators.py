@@ -4,7 +4,7 @@ from enum import Enum
 class MethodAveragePrecision(Enum):
     """
     Class representing if the coordinates are relative to the
-    image size or are absolute values.
+    image image_size or are absolute values.
 
         Developed by: Rafael Padilla
         Last modification: Apr 28 2018
@@ -16,7 +16,7 @@ class MethodAveragePrecision(Enum):
 class CoordinatesType(Enum):
     """
     Class representing if the coordinates are relative to the
-    image size or are absolute values.
+    image image_size or are absolute values.
 
         Developed by: Rafael Padilla
         Last modification: Apr 28 2018

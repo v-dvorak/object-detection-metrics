@@ -35,7 +35,7 @@ def plot_bb_per_classes(dict_bbs_per_class,
     title = f'Distribution of bounding boxes per class {extra_title}'
     plt.title(title)
     if show:
-        plt.tick_params(axis='x', labelsize=10)  # Set the x-axis label size
+        plt.tick_params(axis='x', labelsize=10)  # Set the x-axis label image_size
         plt.show(block=True)
     return plt
 
@@ -50,10 +50,10 @@ det_bbs = converter.text2bb(dir_dets, bb_type=BBType.DETECTED, bb_format=BBForma
 # det_bbs = [bb for bb in det_bbs if bb.get_class_id() == 'cat']
 
 # Uncomment to plot the distribution bounding boxes per classes
-# dict_gt = BoundingBox.get_amount_bounding_box_all_classes(gt_bbs, reverse=False)
+# dict_gt = ValBoundingBox.get_amount_bounding_box_all_classes(gt_bbs, reverse=False)
 # plot_bb_per_classes(dict_gt, horizontally=True, rotation=0, show=True, extra_title=' (groundtruths)')
 # clases_gt = [b.get_class_id() for b in gt_bbs]
-# dict_det = BoundingBox.get_amount_bounding_box_all_classes(det_bbs, reverse=True)
+# dict_det = ValBoundingBox.get_amount_bounding_box_all_classes(det_bbs, reverse=True)
 # general_utils.plot_bb_per_classes(dict_det, horizontally=False, rotation=80, show=True, extra_title=' (detections)')
 
 #############################################################
